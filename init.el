@@ -122,9 +122,6 @@
 (message "init completed in %.2fms"
          (sanityinc/time-subtract-millis (current-time) before-init-time))
 
-(require 'evil)
-(evil-mode 1)
-
 (provide 'init)
 
 ;; Local Variables:
