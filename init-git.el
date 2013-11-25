@@ -2,6 +2,7 @@
 (require-package 'git-gutter-fringe)
 (require-package 'git-blame)
 (require-package 'git-commit-mode)
+(require-package 'git-rebase-mode)
 (require-package 'gitignore-mode)
 (require-package 'gitconfig-mode)
 
@@ -11,6 +12,8 @@
  magit-diff-refine-hunk t
  magit-completing-read-function 'magit-ido-completing-read)
 
+;; Hint: customize `magit-repo-dirs' so that you can use C-u M-F12 to
+;; quickly open magit on any one of your projects.
 (global-set-key [(meta f12)] 'magit-status)
 
 (after-load 'magit
@@ -58,6 +61,7 @@
 
 ;;; git-svn support
 
+(require-package 'magit-svn)
 (after-load 'magit-key-mode
   (require 'magit-svn))
 
@@ -74,7 +78,9 @@
   (interactive "DSelect directory: ")
   (unless git-svn--available-commands
     (setq git-svn--available-commands
-          (string-all-matches "^  \\([a-z\\-]+\\) +" (shell-command-to-string "git svn help") 1)))
+          (sanityinc/string-all-matches
+           "^  \\([a-z\\-]+\\) +"
+           (shell-command-to-string "git svn help") 1)))
   (let* ((default-directory (vc-git-root dir))
          (compilation-buffer-name-function (lambda (major-mode-name) "*git-svn*")))
     (compile (concat "git svn "
